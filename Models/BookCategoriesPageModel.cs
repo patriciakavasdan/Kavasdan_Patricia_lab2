@@ -6,11 +6,11 @@ namespace Kavasdan_Patricia_lab2.Models
 {
     public class BookCategoriesPageModel : PageModel
     {
-        /*public List<AssignedCategoryData> AssignedCategoryDataList;
+        public List<AssignedCategoryData> AssignedCategoryDataList;
         public void PopulateAssignedCategoryData(Kavasdan_Patricia_lab2Context context,
         Book book)
         {
-            //var allCategories = context.Category;
+            var allCategories = context.Category;
             var bookCategories = new HashSet<int>(
             book.BookCategories.Select(c => c.CategoryID)); //
             AssignedCategoryDataList = new List<AssignedCategoryData>();
@@ -59,6 +59,6 @@ namespace Kavasdan_Patricia_lab2.Models
                     }
                 }
             }
-        }*/
+        }
     }
 }
