@@ -17,5 +17,7 @@ namespace Kavasdan_Patricia_lab2.Data
         public DbSet<Kavasdan_Patricia_lab2.Models.Book> Book { get; set; } = default!;
 
         public DbSet<Kavasdan_Patricia_lab2.Models.Publisher> Publisher { get; set; }
+
+        public DbSet<Kavasdan_Patricia_lab2.Models.Author> Author { get; set; }
     }
 }

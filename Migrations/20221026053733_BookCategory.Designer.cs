@@ -4,6 +4,7 @@ using Kavasdan_Patricia_lab2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kavasdan_Patricia_lab2.Migrations
 {
     [DbContext(typeof(Kavasdan_Patricia_lab2Context))]
-    partial class Kavasdan_Patricia_lab2ContextModelSnapshot : ModelSnapshot
+    [Migration("20221026053733_BookCategory")]
+    partial class BookCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,27 +23,6 @@ namespace Kavasdan_Patricia_lab2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Author", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Author");
-                });
 
             modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Book", b =>
                 {
@@ -51,11 +32,12 @@ namespace Kavasdan_Patricia_lab2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int?>("AuthorID")
-                        .HasColumnType("int");
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<int?>("PublisherID")
                         .HasColumnType("int");
@@ -69,11 +51,49 @@ namespace Kavasdan_Patricia_lab2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("AuthorID");
-
                     b.HasIndex("PublisherID");
 
                     b.ToTable("Book");
+                });
+
+            modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.BookCategory", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.ToTable("BookCategory");
+                });
+
+            modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Category", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Publisher", b =>
@@ -95,22 +115,40 @@ namespace Kavasdan_Patricia_lab2.Migrations
 
             modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Book", b =>
                 {
-                    b.HasOne("Kavasdan_Patricia_lab2.Models.Author", "Author")
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorID");
-
                     b.HasOne("Kavasdan_Patricia_lab2.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherID");
 
-                    b.Navigation("Author");
-
                     b.Navigation("Publisher");
                 });
 
-            modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Author", b =>
+            modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.BookCategory", b =>
                 {
-                    b.Navigation("Books");
+                    b.HasOne("Kavasdan_Patricia_lab2.Models.Book", "Book")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("BookID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kavasdan_Patricia_lab2.Models.Category", "Category")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Book", b =>
+                {
+                    b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Category", b =>
+                {
+                    b.Navigation("BookCategories");
                 });
 
             modelBuilder.Entity("Kavasdan_Patricia_lab2.Models.Publisher", b =>

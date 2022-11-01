@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Kavasdan_Patricia_lab2.Data;
 using Kavasdan_Patricia_lab2.Models;
 
-namespace Kavasdan_Patricia_lab2.Pages.Books
+namespace Kavasdan_Patricia_lab2.Pages.Authors
 {
     public class IndexModel : PageModel
     {
@@ -19,12 +19,14 @@ namespace Kavasdan_Patricia_lab2.Pages.Books
             _context = context;
         }
 
-        public IList<Book> Book { get;set; } = default!;
+        public IList<Author> Author { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Book = await _context.Book.Include(b => b.Publisher).ToListAsync();
-            Book = await _context.Book.Include(b => b.Author).ToListAsync();
+            if (_context.Author != null)
+            {
+                Author = await _context.Author.ToListAsync();
+            }
         }
     }
 }

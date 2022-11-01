@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Kavasdan_Patricia_lab2.Data;
 using Kavasdan_Patricia_lab2.Models;
 
-namespace Kavasdan_Patricia_lab2.Pages.Books
+namespace Kavasdan_Patricia_lab2.Pages.Authors
 {
     public class EditModel : PageModel
     {
@@ -21,35 +21,21 @@ namespace Kavasdan_Patricia_lab2.Pages.Books
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
+        public Author Author { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Book == null)
+            if (id == null || _context.Author == null)
             {
                 return NotFound();
             }
 
-            Book = await _context.Book
-            .Include(b => b.Publisher)
-            .Include(b => b.Author)
-            //.Include(b => b.BookCategories).ThenInclude(b => b.Category)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Book == null)
+            var author =  await _context.Author.FirstOrDefaultAsync(m => m.ID == id);
+            if (author == null)
             {
                 return NotFound();
             }
-            //PopulateAssignedCategoryData(_context, Book);
-            var authorList = _context.Author.Select(x => new
-            {
-                x.ID,
-                FullName=x.LastName+ " "+ x.FirstName
-            });
-
-            ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
-            ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "ID", "FullName");
+            Author = author;
             return Page();
         }
 
@@ -62,7 +48,7 @@ namespace Kavasdan_Patricia_lab2.Pages.Books
                 return Page();
             }
 
-            _context.Attach(Book).State = EntityState.Modified;
+            _context.Attach(Author).State = EntityState.Modified;
 
             try
             {
@@ -70,7 +56,7 @@ namespace Kavasdan_Patricia_lab2.Pages.Books
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BookExists(Book.ID))
+                if (!AuthorExists(Author.ID))
                 {
                     return NotFound();
                 }
@@ -83,9 +69,9 @@ namespace Kavasdan_Patricia_lab2.Pages.Books
             return RedirectToPage("./Index");
         }
 
-        private bool BookExists(int id)
+        private bool AuthorExists(int id)
         {
-          return _context.Book.Any(e => e.ID == id);
+          return _context.Author.Any(e => e.ID == id);
         }
     }
 }
