@@ -11,6 +11,11 @@ namespace Kavasdan_Patricia_lab2.Models
     {
         public int ID { get; set; }
         [Display(Name = "Book Title")]
+
+        [RegularExpression(@"^[A-Z]+[a-zA-Z\s-]*$", ErrorMessage ="Numele cartii trebuia sa inceapa cu majuscula si sa contina minim 3 caractere (ex. Ion")]
+
+        [StringLength(150, MinimumLength = 3)]
+
         public string Title { get; set; }
 
         [Column(TypeName = "decimal(6, 2)")] 
